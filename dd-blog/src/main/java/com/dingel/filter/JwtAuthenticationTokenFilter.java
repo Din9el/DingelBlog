@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.rowset.spi.SyncResolver;
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
@@ -57,6 +58,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
         //从redis中获取用户信息
         LoginUser loginUser = redisCache.getCacheObject("bloglogin:" + userId);
+
+        //如果获取不到
+        if(Objects.isNull(loginUser)){
+            //说明登陆过期  提示重新登陆
+            ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+            WebUtils.renderString(response, JSON.toJSONString(result));
+            return;
+        }
+
 
         //存入securityContextHolder
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser,null,null);
