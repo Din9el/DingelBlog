@@ -26,4 +26,8 @@ public class SystemConstants {
 
 
 
+    public static final String COMMENT_ROOTID = "-1";
+
+
+
 }
