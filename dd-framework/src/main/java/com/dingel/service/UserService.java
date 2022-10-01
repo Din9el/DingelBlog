@@ -1,6 +1,7 @@
 package com.dingel.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.dingel.domain.ResponseResult;
 import com.dingel.domain.entity.User;
 
 
@@ -12,5 +13,8 @@ import com.dingel.domain.entity.User;
  */
 public interface UserService extends IService<User> {
 
+    ResponseResult userInfo();
+
+    ResponseResult updateUserInfo(User user);
 }
 

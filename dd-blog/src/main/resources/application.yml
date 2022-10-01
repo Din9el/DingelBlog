@@ -8,8 +8,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
-      max-file-size: 2MB
-      max-request-size: 5MB
+      max-file-size: 10MB
+      max-request-size: 10MB
 mybatis-plus:
   configuration:
     # 日志
@@ -20,4 +20,9 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       id-type: auto
+oss:
+  accessKey: 9UNe7B7Q5eE_sV_DPizJIMtJxtfcEOSwFoPuplsQ
+  secretKey: y9BBPmBqWivtnLDiqCN8F63qbr_n2y9T_s1OpSol
+  bucket: dd-blog
+
 

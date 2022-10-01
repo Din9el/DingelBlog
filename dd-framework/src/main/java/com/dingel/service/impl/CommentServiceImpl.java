@@ -8,12 +8,16 @@ import com.dingel.domain.ResponseResult;
 import com.dingel.domain.entity.Comment;
 import com.dingel.domain.vo.CommentVo;
 import com.dingel.domain.vo.PageVo;
+import com.dingel.enums.AppHttpCodeEnum;
+import com.dingel.handler.exception.SystemException;
 import com.dingel.mapper.CommentMapper;
 import com.dingel.service.CommentService;
 import com.dingel.service.UserService;
 import com.dingel.utils.BeanCopyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import java.util.List;
 
 /**
@@ -29,13 +33,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private UserService userService;
 
     @Override
-    public ResponseResult commentList(Long articleId, Integer pageNum, Integer pageSize) {
+    public ResponseResult commentList(String commentType, Long articleId, Integer pageNum, Integer pageSize) {
         //查询对应文章的根评论
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         //对articleId进行判断
-        queryWrapper.eq(Comment::getArticleId,articleId);
+        queryWrapper.eq(SystemConstants.ARTICLE_COMMENT.equals(commentType),Comment::getArticleId,articleId);
         //根评论 rootId为-1
         queryWrapper.eq(Comment::getRootId, SystemConstants.COMMENT_ROOTID);
+
+        //评论类型
+        queryWrapper.eq(Comment::getType,commentType);
+
 
         //分页查询
         Page<Comment> page = new Page(pageNum,pageSize);
@@ -53,6 +61,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
 
         return ResponseResult.okResult(new PageVo(commentVoList,page.getTotal()));
+    }
+
+    @Override
+    public ResponseResult addComment(Comment comment) {
+        //评论内容不能为空
+        if(!StringUtils.hasText(comment.getContent())){
+            throw new SystemException(AppHttpCodeEnum.CONTENT_NOT_NULL);
+        }
+        save(comment);
+        return ResponseResult.okResult();
     }
 
     private List<CommentVo> getChildren(Long id) {
