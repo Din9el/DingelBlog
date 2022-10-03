@@ -1,6 +1,7 @@
 package com.dingel.controller;
 
 
+import com.dingel.annotation.SystemLog;
 import com.dingel.constants.SystemConstants;
 import com.dingel.domain.ResponseResult;
 import com.dingel.domain.entity.Comment;
@@ -22,6 +23,8 @@ public class CommentController {
         return commentService.commentList(SystemConstants.ARTICLE_COMMENT,articleId,pageNum,pageSize);
     }
 
+
+    @SystemLog(businessName="添加评论")
     @PostMapping
     public ResponseResult addComment(@RequestBody Comment comment){
         return commentService.addComment(comment);

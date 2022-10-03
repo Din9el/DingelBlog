@@ -1,6 +1,7 @@
 package com.dingel.controller;
 
 
+import com.dingel.annotation.SystemLog;
 import com.dingel.domain.ResponseResult;
 import com.dingel.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ public class UploadController {
 
     @Autowired
     private UploadService uploadService;
+
 
 
     @PostMapping("/upload")

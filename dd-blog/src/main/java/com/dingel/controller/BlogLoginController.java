@@ -1,6 +1,7 @@
 package com.dingel.controller;
 
 
+import com.dingel.annotation.SystemLog;
 import com.dingel.domain.ResponseResult;
 import com.dingel.domain.entity.User;
 import com.dingel.enums.AppHttpCodeEnum;
@@ -21,6 +22,7 @@ public class BlogLoginController {
     private BlogLoginService blogLoginService;
 
 
+    @SystemLog(businessName="用户登陆")
     @PostMapping("/login")
     public ResponseResult login(@RequestBody User user){
         if (!StringUtils.hasText(user.getUserName())){
@@ -31,6 +33,7 @@ public class BlogLoginController {
     }
 
 
+    @SystemLog(businessName="退出登陆")
     @PostMapping("/logout")
     public ResponseResult logout(){
         return blogLoginService.logout();

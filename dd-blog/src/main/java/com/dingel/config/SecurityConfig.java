@@ -33,6 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationEntryPoint authenticationEntryPoint;
 
+
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http

@@ -1,5 +1,6 @@
 package com.dingel.controller;
 
+import com.dingel.annotation.SystemLog;
 import com.dingel.domain.ResponseResult;
 import com.dingel.service.LinkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ public class LinkController {
 
     @Autowired
     private LinkService linkService;
+
 
 
     @GetMapping("/getAllLink")
