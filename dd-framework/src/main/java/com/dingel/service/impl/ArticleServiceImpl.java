@@ -1,5 +1,4 @@
 package com.dingel.service.impl;
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -13,24 +12,21 @@ import com.dingel.domain.vo.HotArticleVo;
 import com.dingel.domain.vo.PageVo;
 import com.dingel.mapper.ArticleMapper;
 import com.dingel.service.ArticleService;
-
 import com.dingel.service.CategoryService;
 import com.dingel.utils.BeanCopyUtils;
-import com.sun.org.apache.bcel.internal.generic.LADD;
-import org.springframework.beans.BeanUtils;
+import com.dingel.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService{
 
 
+    @Autowired
+    private RedisCache redisCache;
     @Autowired
     private CategoryService categoryService;
 
@@ -115,6 +111,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //根据id查询文章
         Article article = getById(id);
 
+        //从redis中获取viewCount
+        Integer viewCount = redisCache.getCacheMapValue(SystemConstants.ARTICLE_UPDATE_VIEW_KEY, id.toString());
+        article.setViewCount(viewCount.longValue());
+
         //转换成VO
         ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
 
@@ -127,5 +127,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         //封装响应返回
         return ResponseResult.okResult(articleDetailVo);
+    }
+
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        //更新redis中对应的id浏览量
+        redisCache.incrementCacheMapValue(SystemConstants.ARTICLE_UPDATE_VIEW_KEY,id.toString(),1);
+        return ResponseResult.okResult();
     }
 }

@@ -9,7 +9,6 @@ import com.dingel.service.BlogLoginService;
 import com.dingel.utils.BeanCopyUtils;
 import com.dingel.utils.JwtUtil;
 import com.dingel.utils.RedisCache;
-import com.mysql.cj.log.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

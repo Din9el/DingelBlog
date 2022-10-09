@@ -12,4 +12,5 @@ public interface ArticleService extends IService<Article> {
 
     ResponseResult getArticleDetail(Long id);   //获取文章详情
 
+    ResponseResult updateViewCount(Long id);    //更新文章浏览量
 }
