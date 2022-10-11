@@ -6,6 +6,7 @@ import com.dingel.mapper.RoleMapper;
 import com.dingel.service.RoleService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +20,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public List<String> selectRoleKeyByUserId(Long id) {
-        return null;
+        //判断是否为管理员，如果是返回集合中只需要有admin
+        if(id == 1L){
+            List<String> roleKeys = new ArrayList<>();
+            roleKeys.add("admin");
+            return roleKeys;
+        }
+        //否则查询用户所具有的角色信息
+        return getBaseMapper().selectRoleKeyByUserId(id);
     }
 }
 

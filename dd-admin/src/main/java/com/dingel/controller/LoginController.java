@@ -2,8 +2,10 @@ package com.dingel.controller;
 
 import com.dingel.domain.ResponseResult;
 import com.dingel.domain.entity.LoginUser;
+import com.dingel.domain.entity.Menu;
 import com.dingel.domain.entity.User;
 import com.dingel.domain.vo.AdminUserInfoVo;
+import com.dingel.domain.vo.RoutersVo;
 import com.dingel.domain.vo.UserInfoVo;
 import com.dingel.enums.AppHttpCodeEnum;
 import com.dingel.handler.exception.SystemException;
@@ -49,8 +51,7 @@ public class LoginController {
         //根据用户id查询权限信息
         List<String> perms =  menuService.selectPermsByUserId(loginUser.getUser().getId());
         //根据用户id查询角色信息
-        List<String> roleKeyList = null;
-        //List<String> roleKeyList = roleService.selectRoleKeyByUserId(loginUser.getUser().getId());
+        List<String> roleKeyList = roleService.selectRoleKeyByUserId(loginUser.getUser().getId());
         //获取用户信息
         User user = loginUser.getUser();
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(user, UserInfoVo.class);
@@ -58,4 +59,17 @@ public class LoginController {
         AdminUserInfoVo adminUserInfoVo = new AdminUserInfoVo(perms,roleKeyList,userInfoVo);
         return ResponseResult.okResult(adminUserInfoVo);
     }
+
+
+    @GetMapping("/getRouters")
+    public ResponseResult<RoutersVo> getRouters(){
+        Long userId = SecurityUtils.getUserId();
+        //查询menu 结果是tree的形式
+        List<Menu> menus = menuService.selectRouterMenuTreeByUserId(userId);
+        //封装数据返回
+        return ResponseResult.okResult(new RoutersVo(menus));
+
+    }
+
+
 }
